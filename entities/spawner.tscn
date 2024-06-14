@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://bkfqlew2irmva"]
+
+[ext_resource type="Script" path="res://entities/Spawner.gd" id="1_urrqt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_paxhl"]
+size = Vector2(32, 200)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mii6f"]
+size = Vector3(32, 200, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fqorq"]
+size = Vector2(128, 8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_x1ays"]
+size = Vector3(128, 8, 1)
+
+[node name="Spawner" type="Node2D"]
+position = Vector2(230, 0)
+script = ExtResource("1_urrqt")
+left_side = true
+
+[node name="Pole" type="StaticBody2D" parent="."]
+position = Vector2(0, -100)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pole"]
+shape = SubResource("RectangleShape2D_paxhl")
+
+[node name="Mesh" type="MeshInstance2D" parent="Pole"]
+modulate = Color(0.158491, 0.466282, 0.187264, 1)
+mesh = SubResource("BoxMesh_mii6f")
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(-31, -170)
+
+[node name="Board" type="StaticBody2D" parent="."]
+position = Vector2(-31, -163)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Board"]
+shape = SubResource("RectangleShape2D_fqorq")
+
+[node name="Mesh" type="MeshInstance2D" parent="Board"]
+mesh = SubResource("BoxMesh_x1ays")

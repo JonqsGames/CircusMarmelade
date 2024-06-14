@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3 uid="uid://co0ub2gyy2e1i"]
+
+[ext_resource type="PackedScene" uid="uid://d20qj02giwrsk" path="res://entities/character.tscn" id="1_2vaq0"]
+[ext_resource type="Script" path="res://Plank.gd" id="2_b8nrx"]
+[ext_resource type="PackedScene" uid="uid://bkfqlew2irmva" path="res://entities/spawner.tscn" id="3_ysj0m"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_4adld"]
+radius = 10.0
+height = 20.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_ko8uv"]
+size = Vector3(256, 4, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4qxbs"]
+size = Vector2(256, 4)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_l2jq7"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="CharacterBase" parent="." instance=ExtResource("1_2vaq0")]
+position = Vector2(0, 0)
+status = 4
+left_side = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -300)
+
+[node name="Balance" type="Node2D" parent="."]
+position = Vector2(0, -14)
+
+[node name="Circle" type="MeshInstance2D" parent="Balance"]
+position = Vector2(0, 3)
+mesh = SubResource("SphereMesh_4adld")
+
+[node name="Plank" type="StaticBody2D" parent="Balance"]
+position = Vector2(0, -10)
+script = ExtResource("2_b8nrx")
+
+[node name="Mesh" type="MeshInstance2D" parent="Balance/Plank"]
+mesh = SubResource("BoxMesh_ko8uv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Balance/Plank"]
+shape = SubResource("RectangleShape2D_4qxbs")
+
+[node name="Floor" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+shape = SubResource("WorldBoundaryShape2D_l2jq7")
+
+[node name="SpawnerRight" parent="." instance=ExtResource("3_ysj0m")]
+left_side = false
+
+[node name="SpawnerLeft" parent="." instance=ExtResource("3_ysj0m")]
+position = Vector2(-230, 0)
