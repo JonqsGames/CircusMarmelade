@@ -32,7 +32,8 @@ func _on_pressing_done():
 
 func _on_tilt_done():
 	self.status = Status.AERIAL
-	self.velocity.y = -1024.0
+	self.velocity.y = -ActionPressManager.get_boost_value()
+	ActionPressManager.boost()
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -44,13 +45,19 @@ func _physics_process(delta):
 				self.velocity.x += move_speed * delta
 			move_and_slide()
 			if abs(position.x) > 64.0:
+				ActionPressManager.action_peak_height = abs(self.global_position.y)
 				self.status = Status.AERIAL
 		Status.AERIAL:
 			if Input.is_action_pressed("left"):
 				self.velocity.x -= move_speed * delta
 			if Input.is_action_pressed("right"):
 				self.velocity.x += move_speed * delta
-			velocity.y += gravity * delta
+			var accel_grav = gravity * delta
+			if velocity.y < 0.0 and velocity.y > -accel_grav:
+				# Reach peak
+				ActionPressManager.action_peak_height = abs(self.global_position.y)
+				print("Character reach peak at %s" % [ActionPressManager.action_peak_height])
+			velocity.y += accel_grav
 			if move_and_slide():
 				for i in range(self.get_slide_collision_count()):
 					var c : Node2D = get_slide_collision(i).get_collider()
