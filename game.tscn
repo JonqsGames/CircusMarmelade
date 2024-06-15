@@ -21,7 +21,7 @@ size = Vector2(256, 4)
 
 [node name="CharacterBase" parent="." instance=ExtResource("1_2vaq0")]
 position = Vector2(0, 0)
-status = 4
+status = 6
 left_side = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -50,11 +50,11 @@ shape = SubResource("RectangleShape2D_4qxbs")
 shape = SubResource("WorldBoundaryShape2D_l2jq7")
 
 [node name="SpawnerRight" parent="." instance=ExtResource("3_ysj0m")]
-position = Vector2(230, -3)
+position = Vector2(300, -3)
 left_side = false
 
 [node name="SpawnerLeft" parent="." instance=ExtResource("3_ysj0m")]
-position = Vector2(-230, 0)
+position = Vector2(-300, 0)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
