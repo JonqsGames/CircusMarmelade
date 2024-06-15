@@ -17,7 +17,7 @@ size = Vector2(256, 4)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_l2jq7"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Game" type="Node2D"]
 
 [node name="CharacterBase" parent="." instance=ExtResource("1_2vaq0")]
 position = Vector2(0, 0)

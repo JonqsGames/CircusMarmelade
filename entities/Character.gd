@@ -6,7 +6,8 @@ enum Status {
 	AERIAL,
 	PILED,
 	CRASHED,
-	BASE
+	BASE,
+	HOLDING
 }
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -21,11 +22,18 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @export var left_side = false
 
 var relative_stick_position = Vector3.ZERO
-var plank : Plank = null
+@onready var plank : Plank = $"/root/Game/Balance/Plank"
+
 var move_speed = 256.0
 var rotate_speed = 7.0
 
 signal dead()
+
+func get_relative_d():
+	var x = relative_stick_position.x
+	if left_side:
+		x = -x
+	return x
 
 func _on_pressing_done():
 	if self.status == Status.PRESSING:
@@ -34,7 +42,7 @@ func _on_pressing_done():
 
 func _on_tilt_done():
 	self.status = Status.AERIAL
-	self.velocity.y = -ActionPressManager.get_boost_value()
+	self.velocity.y = -ActionPressManager.get_boost_value() * get_relative_d()/plank.get_half_size()
 	ActionPressManager.boost()
 func _ready():
 	if left_side:
@@ -45,6 +53,7 @@ func _process(delta):
 
 func _physics_process(delta):
 	# Add the gravity.
+	$AnimationTree.set("parameters/BlendWalk/blend_position", float(abs(velocity.x) > 0.0))
 	var v = move_speed * delta
 	var r = rotate_speed * delta
 	match status:
@@ -56,7 +65,7 @@ func _physics_process(delta):
 			move_and_slide()
 			if abs(position.x) > 64.0:
 				self.velocity.x = -sign(self.global_position.x) * 200.0
-				ActionPressManager.action_peak_height = abs(self.global_position.y)
+				ActionPressManager.action_peak_height = abs(self.global_position.y) * get_relative_d()/plank.get_half_size()
 				self.status = Status.AERIAL
 		Status.AERIAL:
 			if Input.is_action_pressed("left"):
@@ -94,6 +103,7 @@ func _physics_process(delta):
 						if c.is_in_group("Character"):
 							if (c.status == Status.PILED or c.status == Status.BASE) and col.get_local_shape().name == "FeetShape":
 								self.status = Status.PILED
+								c.status = Status.HOLDING
 								self.reparent(c)
 								dead.emit()
 								break
@@ -102,13 +112,11 @@ func _physics_process(delta):
 								self.reparent(c)
 								dead.emit()
 								break
-						elif c.name == "Plank":
+						elif c is Plank:
 							# check relative x position
-							plank = c
+							#plank = c
 							relative_stick_position = plank.to_local(self.global_position)
-							var x = relative_stick_position.x
-							if left_side:
-								x = -x
+							var x = get_relative_d()
 							if x > 0 and col.get_local_shape().name == "FeetShape":
 								self.status = Status.PRESSING
 								self.velocity = Vector2.ZERO
@@ -123,6 +131,7 @@ func _physics_process(delta):
 								break
 						elif c.name == "Board" and col.get_local_shape().name == "FeetShape":
 							self.status = Status.PREPARING
+							self.rotation = 0.0
 							self.velocity = Vector2.ZERO
 							break
 						else:
@@ -135,7 +144,7 @@ func _physics_process(delta):
 			self.global_position = plank.to_global(relative_stick_position)
 		Status.PILED:
 			self.position = lerp(self.position,Vector2(0.0,-40.0),delta * 2.0)
-			self.rotate((randf() - 0.5) * delta * 0.7)
+			self.rotate((randf() - 0.5) * delta * 0.4)
 			self.rotation = lerp_angle(self.rotation,0.0,delta * 1.0)
 	
 func die():
