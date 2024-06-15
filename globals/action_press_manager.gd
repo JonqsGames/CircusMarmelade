@@ -6,6 +6,7 @@ const ACTION_TIME_WINDOW = 0.8
 var last_time_action_pressed = 0
 
 var action_peak_height = 0.0
+var time_scale_stop_time = 0.0
 
 signal boost_proceed()
 
@@ -13,11 +14,12 @@ func get_elapsed_time_last_action():
 	return Time.get_unix_time_from_system() - last_time_action_pressed
 
 func boost():
+	time_scale_stop_time = 0.1 * get_boost_multiplicator()
 	boost_proceed.emit()
 	last_time_action_pressed = 0.0
 
 func get_boost_value():
-	return clamp(action_peak_height,256.0,350.0) * (2.0 + get_boost_multiplicator() * 0.8)
+	return clamp(action_peak_height,256.0,450.0) * (2.0 + get_boost_multiplicator() * 1.2)
 	
 func get_boost_multiplicator():
 	var v = 0.0
@@ -31,6 +33,9 @@ func get_boost_multiplicator():
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if time_scale_stop_time > 0.0:
+		time_scale_stop_time = time_scale_stop_time  - delta / Engine.time_scale
+		Engine.time_scale = 0.25 if time_scale_stop_time > 0.0 else 1.0
 	if Input.is_action_just_pressed("action") and get_elapsed_time_last_action() > MIN_ACTION_DELAY:
 		last_time_action_pressed = Time.get_unix_time_from_system()
 		print("Action registered")

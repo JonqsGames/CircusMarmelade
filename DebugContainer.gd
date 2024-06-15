@@ -9,6 +9,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+	$VBoxContainer/TimeScaleStopTime.text = "Time scale stop %.2f" % [ActionPressManager.time_scale_stop_time]
 func _update_boost_multiplicator_values():
 	$VBoxContainer/BoostValue.text = "Boost Value : %.2f" % [ActionPressManager.get_boost_value()]
 	$VBoxContainer/BoostMultiplicator.text = "Boost : %.2f" % [ActionPressManager.get_boost_multiplicator()]
