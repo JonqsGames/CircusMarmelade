@@ -210,6 +210,8 @@ func _physics_process(delta):
 			self.rotate(tilt_speed * delta)
 			self.rotation = lerp_angle(self.rotation,0.0,delta * 1.0)
 			if abs(self.rotation) > PI * 0.05:
+				if self.get_parent() is Character:
+					self.get_parent().status = Status.PILED
 				self.status = Status.FALLING
 	
 func die():
