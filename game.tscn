@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://co0ub2gyy2e1i"]
+[gd_scene load_steps=32 format=3 uid="uid://co0ub2gyy2e1i"]
 
 [ext_resource type="Texture2D" uid="uid://cdviiwygxt2ea" path="res://img/circus_open.png" id="1_2ohbs"]
 [ext_resource type="PackedScene" uid="uid://d20qj02giwrsk" path="res://entities/character.tscn" id="1_2vaq0"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://j4kjpfumtdyh" path="res://img/circus_open_light.png" id="5_lgy85"]
 [ext_resource type="Script" path="res://BounceBar.gd" id="6_fxx7k"]
 [ext_resource type="Script" path="res://ScoreContainer.gd" id="7_8p4h6"]
+[ext_resource type="Texture2D" uid="uid://cvb0m8hxsv6kb" path="res://img/balancoire.png" id="10_7g2tx"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_4adld"]
 radius = 10.0
@@ -316,6 +317,7 @@ position = Vector2(48, -478)
 texture = ExtResource("5_lgy85")
 
 [node name="CircusCover" type="Sprite2D" parent="WorldBackground"]
+visible = false
 top_level = true
 z_index = 200
 position = Vector2(38.5, -466.25)
@@ -335,6 +337,7 @@ script = ExtResource("2_dbve3")
 position = Vector2(0, -14)
 
 [node name="Circle" type="MeshInstance2D" parent="Balance"]
+visible = false
 position = Vector2(0, 3)
 mesh = SubResource("SphereMesh_4adld")
 
@@ -361,6 +364,11 @@ mesh = SubResource("BoxMesh_hfyjh")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Balance/Plank/MiddlePlank"]
 shape = SubResource("RectangleShape2D_e57qh")
+
+[node name="Sprite2D" type="Sprite2D" parent="Balance"]
+texture_filter = 1
+position = Vector2(-1, -28)
+texture = ExtResource("10_7g2tx")
 
 [node name="Floor" type="StaticBody2D" parent="."]
 

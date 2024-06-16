@@ -34,8 +34,8 @@ var r_value_score = 0.0 :
 			$AnimationTree["parameters/playback"].travel("Figure")
 			score += 100.0
 			r_value_score -= sign(r_value_score)
-		else:
-			print(r_value_score)
+		#else:
+			#print(r_value_score)
 
 @export var status = Status.PREPARING :
 	set(value):
@@ -51,14 +51,15 @@ var r_value_score = 0.0 :
 				$AudioStreamPlayer2D.play()
 			self.position = Vector2(0.0,-40.0)
 		elif value == Status.FALLING:
-			ScoreManager.remove_point(score)
+			if status == Status.PILED:
+				ScoreManager.remove_point(score)
 			self.set_collision_mask_value(2,false)
 			self.reparent($/root/Game)
 			for c in self.get_children():
 				if c is Character:
 					c.status = Status.FALLING
 		status = value
-		print("Character change status to %s" % Status.keys()[status])
+		#print("Character change status to %s" % Status.keys()[status])
 			
 
 @export var left_side = false

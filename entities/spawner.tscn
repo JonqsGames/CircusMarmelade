@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bkfqlew2irmva"]
+[gd_scene load_steps=7 format=3 uid="uid://bkfqlew2irmva"]
 
 [ext_resource type="Script" path="res://entities/Spawner.gd" id="1_urrqt"]
+[ext_resource type="Texture2D" uid="uid://cbk4ybbnaymae" path="res://img/plongeoire.png" id="2_pt5mf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_paxhl"]
 size = Vector2(32, 200)
@@ -26,6 +27,7 @@ position = Vector2(0, -100)
 shape = SubResource("RectangleShape2D_paxhl")
 
 [node name="Mesh" type="MeshInstance2D" parent="Pole"]
+visible = false
 modulate = Color(0.158491, 0.466282, 0.187264, 1)
 mesh = SubResource("BoxMesh_mii6f")
 
@@ -39,4 +41,11 @@ position = Vector2(-31, -163)
 shape = SubResource("RectangleShape2D_fqorq")
 
 [node name="Mesh" type="MeshInstance2D" parent="Board"]
+visible = false
 mesh = SubResource("BoxMesh_x1ays")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-22, -104)
+texture = ExtResource("2_pt5mf")
+flip_h = true

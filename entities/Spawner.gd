@@ -8,6 +8,7 @@ func _ready():
 	if left_side:
 		for c in self.get_children():
 			c.position.x = -c.position.x
+	$Sprite2D.flip_h = !left_side
 	self.spawn()
 
 func spawn():
