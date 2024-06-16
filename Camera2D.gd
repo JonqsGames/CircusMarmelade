@@ -65,15 +65,9 @@ func adjustZoom(delta):
 		var normalized_speed = clamp((player_speed - min_speed) / (max_speed - min_speed), 0, 1)
 		
 		var camera_top_offset = 100
-		if abs(highest_player.global_position.y) > camera_top_position - camera_top_offset:
-			# Zoom to 0.5 when player reach the top of the camera
-			# Need to fix it to match the zoom level based on player altitude
-			zoom = zoom.lerp(Vector2(0.5, 0.5), normalized_speed)
-			move_camera_y_smoothly(initial_position_y / 0.5, 5, delta)
-		else:
-			# Back to normal zoom
-			zoom = zoom.lerp(Vector2(1, 1), normalized_speed)
-			move_camera_y_smoothly(initial_position_y, 5, delta)
+		var zoom_level = get_zoom_level(abs(highest_player.global_position.y))
+		zoom = zoom.lerp(Vector2(zoom_level, zoom_level), 0.8)
+		move_camera_y_smoothly(initial_position_y / zoom_level, 5, delta)
 
 # Kick off a new screenshake effect.
 func shake(duration, frequency, amplitude):
@@ -101,3 +95,13 @@ func find_highest_player():
 			highest_y = abs(character.global_position.y)
 			current_player = character
 	return current_player
+	
+func get_zoom_level(y: float) -> float:
+	var altitude_threshold = 800 # The altitude when start zooming
+	if y < altitude_threshold:
+		return 1.0
+	
+	var zoom_sensitivity = 2000 # To make it more sensitive decrease this value
+	var m = (0.01 - 1.0) / (zoom_sensitivity - altitude_threshold)
+	var zoom = m * (y - altitude_threshold) + 1.0
+	return clamp(zoom, 0.01, 1.0)
