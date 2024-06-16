@@ -11,7 +11,11 @@ enum Status {
 	HOLDING,
 	FALLING
 }
-
+var textures = [
+	preload("res://img/clown.png"),
+	preload("res://img/clownb.png"), 
+	preload("res://img/clownc.png")
+]
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var spin_progress : TextureProgressBar = $SpinProgress
@@ -80,6 +84,7 @@ func _on_tilt_done():
 	self.velocity.y = -ActionPressManager.get_boost_value() * get_relative_d()/plank.get_half_size()
 	ActionPressManager.boost()
 func _ready():
+	$Sprite2D.texture = textures.pick_random()
 	if left_side:
 		$Sprite2D.flip_h = true
 func _process(delta):
@@ -99,15 +104,16 @@ func _physics_process(delta):
 	var r = rotate_speed * delta
 	match status:
 		Status.PREPARING:
-			if Input.is_action_pressed("left"):
-				self.velocity.x -= v
-			if Input.is_action_pressed("right"):
-				self.velocity.x += v
-			move_and_slide()
-			if abs(position.x) > 64.0:
-				self.velocity.x = -sign(self.global_position.x) * 200.0
-				ActionPressManager.action_peak_height = abs(self.global_position.y) * get_relative_d()/plank.get_half_size()
-				self.status = Status.AERIAL
+			if GameManager.status == GameManager.Status.GAME:
+				if Input.is_action_pressed("left"):
+					self.velocity.x -= v
+				if Input.is_action_pressed("right"):
+					self.velocity.x += v
+				move_and_slide()
+				if abs(position.x) > 64.0:
+					self.velocity.x = -sign(self.global_position.x) * 200.0
+					ActionPressManager.action_peak_height = abs(self.global_position.y) * get_relative_d()/plank.get_half_size()
+					self.status = Status.AERIAL
 		Status.FALLING:
 			self.rotate(tilt_speed * delta)
 			var accel_grav = gravity * delta

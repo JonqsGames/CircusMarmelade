@@ -1,7 +1,8 @@
-[gd_scene load_steps=23 format=3 uid="uid://co0ub2gyy2e1i"]
+[gd_scene load_steps=26 format=3 uid="uid://co0ub2gyy2e1i"]
 
 [ext_resource type="Texture2D" uid="uid://cdviiwygxt2ea" path="res://img/circus_open.png" id="1_2ohbs"]
 [ext_resource type="PackedScene" uid="uid://d20qj02giwrsk" path="res://entities/character.tscn" id="1_2vaq0"]
+[ext_resource type="Script" path="res://game.gd" id="1_6cc7v"]
 [ext_resource type="Script" path="res://Plank.gd" id="2_b8nrx"]
 [ext_resource type="Script" path="res://Camera2D.gd" id="2_dbve3"]
 [ext_resource type="Script" path="res://EarthBackground.gd" id="2_ng5vw"]
@@ -228,7 +229,30 @@ _data = {
 "success": SubResource("Animation_bpp25")
 }
 
+[sub_resource type="Animation" id="Animation_qgvm7"]
+resource_name = "Intro"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"intro_done"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1kqmh"]
+_data = {
+"Intro": SubResource("Animation_qgvm7")
+}
+
 [node name="Game" type="Node2D"]
+script = ExtResource("1_6cc7v")
 
 [node name="WorldBackground" type="Node2D" parent="."]
 position = Vector2(-38, 10)
@@ -298,9 +322,59 @@ left_side = false
 [node name="SpawnerLeft" parent="." instance=ExtResource("3_ysj0m")]
 position = Vector2(-300, 0)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="MultiMeshInstance2D" type="MultiMeshInstance2D" parent="."]
 
-[node name="DebugContainer" type="CenterContainer" parent="CanvasLayer"]
+[node name="MenuLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="MenuLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.321569, 0.321569, 0.321569, 0.643137)
+
+[node name="CenterContainer" type="CenterContainer" parent="MenuLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuLayer/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="Title" type="Label" parent="MenuLayer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Marmelade Gravity Circus"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="MenuLayer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Press SPACE to start"
+horizontal_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MenuLayer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "[center]
+Controls:
+Use Left and Right arrows to move the clown
+Use Up and Down arrows when in air to do some ticks
+Press SPACE just before reception to go higher 
+Press ESCAPE to pause
+[/center]"
+fit_content = true
+
+[node name="GameUI" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="DebugContainer" type="CenterContainer" parent="GameUI"]
 visible = false
 anchors_preset = 4
 anchor_top = 0.5
@@ -311,30 +385,30 @@ offset_bottom = 65.5
 grow_vertical = 2
 script = ExtResource("4_2q6mj")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/DebugContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameUI/DebugContainer"]
 layout_mode = 2
 
-[node name="BoostMultiplicator" type="Label" parent="CanvasLayer/DebugContainer/VBoxContainer"]
-layout_mode = 2
-text = "Boost :"
-
-[node name="BoostValue" type="Label" parent="CanvasLayer/DebugContainer/VBoxContainer"]
+[node name="BoostMultiplicator" type="Label" parent="GameUI/DebugContainer/VBoxContainer"]
 layout_mode = 2
 text = "Boost :"
 
-[node name="ActionTimeElapsed" type="Label" parent="CanvasLayer/DebugContainer/VBoxContainer"]
+[node name="BoostValue" type="Label" parent="GameUI/DebugContainer/VBoxContainer"]
 layout_mode = 2
 text = "Boost :"
 
-[node name="TimeScaleStopTime" type="Label" parent="CanvasLayer/DebugContainer/VBoxContainer"]
+[node name="ActionTimeElapsed" type="Label" parent="GameUI/DebugContainer/VBoxContainer"]
 layout_mode = 2
 text = "Boost :"
 
-[node name="BoostStatus" type="Label" parent="CanvasLayer/DebugContainer/VBoxContainer"]
+[node name="TimeScaleStopTime" type="Label" parent="GameUI/DebugContainer/VBoxContainer"]
 layout_mode = 2
 text = "Boost :"
 
-[node name="BounceBar" type="CenterContainer" parent="CanvasLayer"]
+[node name="BoostStatus" type="Label" parent="GameUI/DebugContainer/VBoxContainer"]
+layout_mode = 2
+text = "Boost :"
+
+[node name="BounceBar" type="CenterContainer" parent="GameUI"]
 custom_minimum_size = Vector2(1024, 64)
 anchors_preset = 7
 anchor_left = 0.5
@@ -349,7 +423,7 @@ grow_vertical = 0
 size_flags_horizontal = 3
 script = ExtResource("6_fxx7k")
 
-[node name="HSlider" type="HSlider" parent="CanvasLayer/BounceBar"]
+[node name="HSlider" type="HSlider" parent="GameUI/BounceBar"]
 custom_minimum_size = Vector2(256, 64)
 layout_mode = 2
 theme_override_constants/grabber_offset = 0
@@ -358,23 +432,23 @@ max_value = 200.0
 step = 0.1
 value = -50.0
 
-[node name="Marker" type="MeshInstance2D" parent="CanvasLayer/BounceBar/HSlider"]
+[node name="Marker" type="MeshInstance2D" parent="GameUI/BounceBar/HSlider"]
 modulate = Color(1, 1, 1, 0.32549)
 position = Vector2(128, 32)
 mesh = SubResource("BoxMesh_415c1")
 
-[node name="Marker2" type="MeshInstance2D" parent="CanvasLayer/BounceBar/HSlider/Marker"]
+[node name="Marker2" type="MeshInstance2D" parent="GameUI/BounceBar/HSlider/Marker"]
 visible = false
 modulate = Color(1, 1, 0, 1)
 show_behind_parent = true
 mesh = SubResource("BoxMesh_3uc8x")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/BounceBar"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="GameUI/BounceBar"]
 libraries = {
 "": SubResource("AnimationLibrary_lb006")
 }
 
-[node name="ScoreContainer" type="CenterContainer" parent="CanvasLayer"]
+[node name="ScoreContainer" type="CenterContainer" parent="GameUI"]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -384,15 +458,21 @@ offset_bottom = 40.0
 grow_horizontal = 2
 script = ExtResource("7_8p4h6")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/ScoreContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="GameUI/ScoreContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/ScoreContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="GameUI/ScoreContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Score : "
 
-[node name="Score" type="Label" parent="CanvasLayer/ScoreContainer/HBoxContainer"]
+[node name="Score" type="Label" parent="GameUI/ScoreContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "000000"
 
-[node name="MultiMeshInstance2D" type="MultiMeshInstance2D" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_1kqmh")
+}
+autoplay = "Intro"
