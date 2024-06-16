@@ -14,9 +14,23 @@ enum Status {
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+@onready var spin_progress : TextureProgressBar = $SpinProgress
+var r_value_score = 0.0 :
+	set(value):
+		r_value_score = value
+		if abs(r_value_score) >= 1.0:
+			print("Score Boost !")
+			ActionPressManager.time_scale_stop_time = 0.25
+			$AnimationTree.set("parameters/Figure/blend_position", Vector2(randf() - 0.5,randf() - 0.5) * 2.0)
+			$AnimationTree["parameters/playback"].travel("Figure")
+			score += 100.0
+			r_value_score -= sign(r_value_score)
+		else:
+			print(r_value_score)
 
 @export var status = Status.PREPARING :
 	set(value):
+		r_value_score = 0.0
 		if status == Status.AERIAL:
 			$/root/Game/Camera2D.shake(0.0002 * ActionPressManager.action_peak_height,0.03 * ActionPressManager.action_peak_height,0.02 * ActionPressManager.action_peak_height)
 		status = value
@@ -67,7 +81,13 @@ func _ready():
 		$Sprite2D.flip_h = true
 func _process(delta):
 	# DEBUG
+	spin_progress.global_position = self.global_position + Vector2(-8.0,30.0)
 	$DebugR.text = "R %.2f" % [self.rotation]
+	if status != Status.AERIAL:
+		spin_progress.value = 0.0
+	else:
+		spin_progress.scale.x = 0.5 if r_value_score > 0.0 else -0.5
+		spin_progress.value = r_value_score
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -102,12 +122,14 @@ func _physics_process(delta):
 				$AnimationTree.set("parameters/flying_rot/blend_position", 1.0)
 				#self.global_transform = self.global_transform * Transform2D().translated(-$RotationCenter.position).rotated(r)
 				self.rotate(r)
+				self.r_value_score += r / (PI*2.0)
 				#self.position.x -= sin(r) * $RotationCenter.position.y
 				#self.position.y -= cos(r) * $RotationCenter.position.y
 			elif Input.is_action_pressed("rotate_negative"):
 				$AnimationTree.set("parameters/flying_rot/blend_position", 1.0)
 				#self.global_transform = self.global_transform * Transform2D().translated(-$RotationCenter.position).rotated(-r)
 				self.rotate(-r)
+				self.r_value_score -= r / (PI*2.0)
 				#self.position.x += sin(r) * $RotationCenter.position.y
 				#self.position.y += cos(r) * $RotationCenter.position.y
 			else:
@@ -133,6 +155,7 @@ func _physics_process(delta):
 								self.reparent(c)
 								self.rotation = 0.0
 								self.status = Status.PILED
+								ScoreManager.add_point(score)
 								c.status = Status.HOLDING
 								dead.emit()
 								break
@@ -149,7 +172,6 @@ func _physics_process(delta):
 							relative_stick_position = plank.to_local(self.global_position)
 							var x = get_relative_d()
 							if x > 0 and col.get_local_shape().name == "FeetShape":
-								ScoreManager.add_point(score)
 								self.status = Status.PRESSING
 								self.velocity = Vector2.ZERO
 								print("[Character] Landing : %.2f" % [global_position.y])

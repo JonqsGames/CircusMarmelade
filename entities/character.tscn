@@ -1,7 +1,8 @@
-[gd_scene load_steps=42 format=3 uid="uid://d20qj02giwrsk"]
+[gd_scene load_steps=54 format=3 uid="uid://d20qj02giwrsk"]
 
 [ext_resource type="Script" path="res://entities/Character.gd" id="1_uu2un"]
 [ext_resource type="Texture2D" uid="uid://duic01jhq3egx" path="res://img/clown.png" id="2_pjpug"]
+[ext_resource type="Texture2D" uid="uid://c3b7uyo3sqif2" path="res://img/spinner_progress.png" id="3_i23rk"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_mrfxx"]
 radius = 16.0
@@ -203,8 +204,76 @@ tracks/0/keys = {
 "values": [3, 5]
 }
 
+[sub_resource type="Animation" id="Animation_et577"]
+resource_name = "FigureA"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [14]
+}
+
+[sub_resource type="Animation" id="Animation_1lxuj"]
+resource_name = "FigureB"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [15]
+}
+
+[sub_resource type="Animation" id="Animation_4ste8"]
+resource_name = "FigureC"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [16]
+}
+
+[sub_resource type="Animation" id="Animation_2an4m"]
+resource_name = "FigureD"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [17]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cictl"]
 _data = {
+"FigureA": SubResource("Animation_et577"),
+"FigureB": SubResource("Animation_1lxuj"),
+"FigureC": SubResource("Animation_4ste8"),
+"FigureD": SubResource("Animation_2an4m"),
 "RESET": SubResource("Animation_13r30"),
 "crash": SubResource("Animation_2rjii"),
 "fail": SubResource("Animation_0wym0"),
@@ -235,6 +304,29 @@ blend_point_1/pos = 1.0
 blend_point_2/node = SubResource("AnimationNodeAnimation_hyywk")
 blend_point_2/pos = 0.0
 min_space = 0.0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x371d"]
+animation = &"FigureA"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jpv51"]
+animation = &"FigureB"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_iirsq"]
+animation = &"FigureC"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tj2rt"]
+animation = &"FigureD"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_65xk4"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_x371d")
+blend_point_0/pos = Vector2(0, 1)
+blend_point_1/node = SubResource("AnimationNodeAnimation_jpv51")
+blend_point_1/pos = Vector2(1, 0)
+blend_point_2/node = SubResource("AnimationNodeAnimation_iirsq")
+blend_point_2/pos = Vector2(-1, 0)
+blend_point_3/node = SubResource("AnimationNodeAnimation_tj2rt")
+blend_point_3/pos = Vector2(0, -1)
+blend_mode = 1
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tyscs"]
 animation = &"crash"
@@ -309,25 +401,33 @@ advance_expression = "status == Status.BASE"
 advance_mode = 2
 advance_expression = "status == Status.FALLING"
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_706ld"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_17mbl"]
+switch_mode = 2
+advance_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ww7wi"]
 states/BlendWalk/node = SubResource("AnimationNodeBlendSpace1D_cqpov")
 states/BlendWalk/position = Vector2(248, 100)
 states/End/position = Vector2(901, 100)
+states/Figure/node = SubResource("AnimationNodeBlendSpace2D_65xk4")
+states/Figure/position = Vector2(390, -51.954)
 states/Start/position = Vector2(98, 79)
 states/crash/node = SubResource("AnimationNodeAnimation_tyscs")
-states/crash/position = Vector2(693, 158)
+states/crash/position = Vector2(708, 184)
 states/flying/node = SubResource("AnimationNodeAnimation_nnuin")
 states/flying/position = Vector2(218, 229)
 states/flying_rot/node = SubResource("AnimationNodeBlendSpace1D_qh13d")
 states/flying_rot/position = Vector2(438, 73)
 states/landing/node = SubResource("AnimationNodeAnimation_efsq3")
-states/landing/position = Vector2(606, 33)
+states/landing/position = Vector2(654, 34)
 states/piled/node = SubResource("AnimationNodeAnimation_wl6ln")
-states/piled/position = Vector2(626, 253)
+states/piled/position = Vector2(580, 288)
 states/piling/node = SubResource("AnimationNodeAnimation_kv5n6")
-states/piling/position = Vector2(428, 229)
-transitions = ["flying_rot", "landing", SubResource("AnimationNodeStateMachineTransition_6eq2t"), "landing", "flying_rot", SubResource("AnimationNodeStateMachineTransition_nux3y"), "flying_rot", "piling", SubResource("AnimationNodeStateMachineTransition_o5ci4"), "flying_rot", "crash", SubResource("AnimationNodeStateMachineTransition_ubq81"), "crash", "End", SubResource("AnimationNodeStateMachineTransition_duvba"), "piling", "piled", SubResource("AnimationNodeStateMachineTransition_axfp4"), "Start", "BlendWalk", SubResource("AnimationNodeStateMachineTransition_vhirm"), "BlendWalk", "flying_rot", SubResource("AnimationNodeStateMachineTransition_1lonl"), "flying_rot", "BlendWalk", SubResource("AnimationNodeStateMachineTransition_a8uea"), "BlendWalk", "piling", SubResource("AnimationNodeStateMachineTransition_j17hc"), "piled", "flying_rot", SubResource("AnimationNodeStateMachineTransition_t87j2")]
-graph_offset = Vector2(56, -31)
+states/piling/position = Vector2(371, 274)
+transitions = ["flying_rot", "landing", SubResource("AnimationNodeStateMachineTransition_6eq2t"), "landing", "flying_rot", SubResource("AnimationNodeStateMachineTransition_nux3y"), "flying_rot", "piling", SubResource("AnimationNodeStateMachineTransition_o5ci4"), "flying_rot", "crash", SubResource("AnimationNodeStateMachineTransition_ubq81"), "crash", "End", SubResource("AnimationNodeStateMachineTransition_duvba"), "piling", "piled", SubResource("AnimationNodeStateMachineTransition_axfp4"), "Start", "BlendWalk", SubResource("AnimationNodeStateMachineTransition_vhirm"), "BlendWalk", "flying_rot", SubResource("AnimationNodeStateMachineTransition_1lonl"), "flying_rot", "BlendWalk", SubResource("AnimationNodeStateMachineTransition_a8uea"), "BlendWalk", "piling", SubResource("AnimationNodeStateMachineTransition_j17hc"), "piled", "flying_rot", SubResource("AnimationNodeStateMachineTransition_t87j2"), "flying_rot", "Figure", SubResource("AnimationNodeStateMachineTransition_706ld"), "Figure", "flying_rot", SubResource("AnimationNodeStateMachineTransition_17mbl")]
+graph_offset = Vector2(56, -242.954)
 
 [node name="Character" type="CharacterBody2D" groups=["Character"]]
 position = Vector2(0, 1)
@@ -380,4 +480,18 @@ tree_root = SubResource("AnimationNodeStateMachine_ww7wi")
 advance_expression_base_node = NodePath("..")
 anim_player = NodePath("../AnimationPlayer")
 parameters/BlendWalk/blend_position = -2.605
+parameters/Figure/blend_position = Vector2(-0.00271988, 0.00642395)
 parameters/flying_rot/blend_position = 0
+
+[node name="SpinProgress" type="TextureProgressBar" parent="."]
+top_level = true
+offset_left = -30.0
+offset_top = 8.0
+offset_right = 90.0
+offset_bottom = 128.0
+scale = Vector2(0.5, 0.5)
+max_value = 1.0
+step = 0.05
+value = 0.2
+fill_mode = 4
+texture_progress = ExtResource("3_i23rk")
