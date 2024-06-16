@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://co0ub2gyy2e1i"]
+[gd_scene load_steps=21 format=3 uid="uid://co0ub2gyy2e1i"]
 
 [ext_resource type="PackedScene" uid="uid://d20qj02giwrsk" path="res://entities/character.tscn" id="1_2vaq0"]
 [ext_resource type="Script" path="res://Plank.gd" id="2_b8nrx"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bkfqlew2irmva" path="res://entities/spawner.tscn" id="3_ysj0m"]
 [ext_resource type="Script" path="res://DebugContainer.gd" id="4_2q6mj"]
 [ext_resource type="Script" path="res://BounceBar.gd" id="6_fxx7k"]
+[ext_resource type="Script" path="res://ScoreContainer.gd" id="7_8p4h6"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_4adld"]
 radius = 10.0
@@ -282,13 +283,14 @@ position = Vector2(-300, 0)
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="DebugContainer" type="CenterContainer" parent="CanvasLayer"]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -26.5
-offset_right = 26.5
-offset_bottom = 40.0
-grow_horizontal = 2
+visible = false
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -65.5
+offset_right = 53.0
+offset_bottom = 65.5
+grow_vertical = 2
 script = ExtResource("4_2q6mj")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/DebugContainer"]
@@ -353,5 +355,26 @@ mesh = SubResource("BoxMesh_3uc8x")
 libraries = {
 "": SubResource("AnimationLibrary_lb006")
 }
+
+[node name="ScoreContainer" type="CenterContainer" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+script = ExtResource("7_8p4h6")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/ScoreContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/ScoreContainer/HBoxContainer"]
+layout_mode = 2
+text = "Score : "
+
+[node name="Score" type="Label" parent="CanvasLayer/ScoreContainer/HBoxContainer"]
+layout_mode = 2
+text = "000000"
 
 [node name="MultiMeshInstance2D" type="MultiMeshInstance2D" parent="."]

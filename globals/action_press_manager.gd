@@ -30,7 +30,7 @@ func get_boost_value():
 	for c in get_tree().get_nodes_in_group("Character"):
 		if c.status == Character.Status.PILED and c.global_position.y < p_max:
 			p_max = c.global_position.y
-	return clamp(action_peak_height,256.0 - p_max,300.0 - p_max) * (0.55 + get_boost_multiplicator() * 0.35)
+	return clamp(action_peak_height,256.0 - p_max * 0.1,300.0 - p_max) * (0.55 + get_boost_multiplicator() * 0.35)
 	
 func get_boost_multiplicator():
 	var v = 0.0

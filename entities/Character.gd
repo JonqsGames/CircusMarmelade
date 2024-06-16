@@ -26,6 +26,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 		elif status == Status.PILED:
 			self.position = Vector2(0.0,-40.0)
 		elif status == Status.FALLING:
+			ScoreManager.remove_point(score)
 			self.set_collision_mask_value(2,false)
 			self.reparent($/root/Game)
 			for c in self.get_children():
@@ -41,6 +42,8 @@ var move_speed = 256.0
 var rotate_speed = 7.0
 
 var tilt_speed = 0.0
+
+var score = 500.0
 
 signal dead()
 
@@ -134,7 +137,7 @@ func _physics_process(delta):
 								dead.emit()
 								break
 							else:
-								var tilt = -sign(self.global_position.x - c.global_position.x) * 0.3
+								var tilt = -sign(self.global_position.x - c.global_position.x) * 0.5
 								c.tilt_speed = tilt
 								self.status = Status.CRASHED
 								self.reparent(c)
@@ -146,6 +149,7 @@ func _physics_process(delta):
 							relative_stick_position = plank.to_local(self.global_position)
 							var x = get_relative_d()
 							if x > 0 and col.get_local_shape().name == "FeetShape":
+								ScoreManager.add_point(score)
 								self.status = Status.PRESSING
 								self.velocity = Vector2.ZERO
 								print("[Character] Landing : %.2f" % [global_position.y])
@@ -174,9 +178,10 @@ func _physics_process(delta):
 			self.global_position = plank.to_global(relative_stick_position)
 		Status.PILED, Status.HOLDING:
 			if abs(self.rotation) > PI * 0.04:
-				tilt_speed -= sign(self.rotation) * delta * 0.4
+				tilt_speed -= sign(self.rotation) * delta * 0.8
 			else:
 				tilt_speed += (randf() - 0.5) * delta * 0.4
+				tilt_speed *= 0.999
 			self.rotate(tilt_speed * delta)
 			self.rotation = lerp_angle(self.rotation,0.0,delta * 1.0)
 			if abs(self.rotation) > PI * 0.05:
