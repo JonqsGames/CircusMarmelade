@@ -1,21 +1,27 @@
 extends Node
 
-const MIN_ACTION_DELAY = 0.5
-const ACTION_TIME_WINDOW = 0.5
+const MIN_ACTION_DELAY = 1.0
+const ACTION_TIME_WINDOW = 0.1
 
 var last_time_action_pressed = 0
+var landing_time = 0
 
 var action_peak_height = 0.0
 var time_scale_stop_time = 0.0
 
 signal boost_proceed()
 
+
+func set_landing_time():
+	landing_time = Time.get_unix_time_from_system()
+
 func get_elapsed_time_last_action():
-	return Time.get_unix_time_from_system() - last_time_action_pressed
+	return abs(landing_time - last_time_action_pressed)
 
 func boost():
-	time_scale_stop_time = 0.1 * get_boost_multiplicator()
-	boost_proceed.emit()
+	var b_m = get_boost_multiplicator()
+	time_scale_stop_time = 0.1 * b_m
+	boost_proceed.emit(b_m)
 	last_time_action_pressed = 0.0
 
 func get_boost_value():

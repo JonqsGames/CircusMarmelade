@@ -144,6 +144,8 @@ func _physics_process(delta):
 							if x > 0 and col.get_local_shape().name == "FeetShape":
 								self.status = Status.PRESSING
 								self.velocity = Vector2.ZERO
+								print("[Character] Landing : %.2f" % [global_position.y])
+								ActionPressManager.set_landing_time()
 								plank.release.connect(self._on_pressing_done,CONNECT_ONE_SHOT | CONNECT_DEFERRED)
 								#Rotate
 								c.tilt(left_side)
