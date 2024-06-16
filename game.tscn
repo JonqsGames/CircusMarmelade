@@ -26,51 +26,10 @@ size = Vector2(130, 4)
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_l2jq7"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_415c1"]
-size = Vector3(16, 32, 16)
+size = Vector3(20, 32, 16)
 
 [sub_resource type="BoxMesh" id="BoxMesh_3uc8x"]
-size = Vector3(18, 34, 18)
-
-[sub_resource type="Animation" id="Animation_py4ib"]
-resource_name = "fail"
-length = 0.3
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("HSlider/Marker:rotation")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [0.0, 0.488692, -0.349066, 0.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("HSlider/Marker:modulate")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0.32549), Color(1, 0, 0.0166664, 0.32549), Color(1, 1, 1, 0.32549)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("HSlider/Marker:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(0.8, 0.8), Vector2(1, 1)]
-}
+size = Vector3(22, 34, 18)
 
 [sub_resource type="Animation" id="Animation_5bpt6"]
 length = 0.001
@@ -123,8 +82,8 @@ tracks/3/keys = {
 "values": [false]
 }
 
-[sub_resource type="Animation" id="Animation_bpp25"]
-resource_name = "success"
+[sub_resource type="Animation" id="Animation_py4ib"]
+resource_name = "fail"
 length = 0.3
 step = 0.05
 tracks/0/type = "value"
@@ -137,7 +96,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [0.0, -0.366519, 0.314159, 0.0]
+"values": [0.0, 0.488692, -0.349066, 0.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -149,7 +108,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.15, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 0.32549), Color(0.416429, 0.601728, 0.151407, 0.32549), Color(1, 1, 1, 0.32549)]
+"values": [Color(1, 1, 1, 0.32549), Color(1, 0, 0.0166664, 0.32549), Color(1, 1, 1, 0.32549)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -161,7 +120,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.15, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
+"values": [Vector2(1, 1), Vector2(0.8, 0.8), Vector2(1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_ewphy"]
@@ -215,6 +174,47 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [false, true, true, false]
+}
+
+[sub_resource type="Animation" id="Animation_bpp25"]
+resource_name = "success"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HSlider/Marker:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -0.366519, 0.314159, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HSlider/Marker:modulate")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.32549), Color(0.416429, 0.601728, 0.151407, 0.32549), Color(1, 1, 1, 0.32549)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("HSlider/Marker:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lb006"]
@@ -332,6 +332,7 @@ script = ExtResource("6_fxx7k")
 [node name="HSlider" type="HSlider" parent="CanvasLayer/BounceBar"]
 custom_minimum_size = Vector2(256, 64)
 layout_mode = 2
+theme_override_constants/grabber_offset = 0
 min_value = -200.0
 max_value = 200.0
 step = 0.1

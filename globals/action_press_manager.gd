@@ -10,6 +10,7 @@ var action_peak_height = 0.0
 var time_scale_stop_time = 0.0
 
 signal boost_proceed()
+signal action_pressed()
 
 
 func set_landing_time():
@@ -25,7 +26,11 @@ func boost():
 	last_time_action_pressed = 0.0
 
 func get_boost_value():
-	return clamp(action_peak_height,256.0,450.0) * (0.55 + get_boost_multiplicator() * 0.35)
+	var p_max = 0.0
+	for c in get_tree().get_nodes_in_group("Character"):
+		if c.status == Character.Status.PILED and c.global_position.y < p_max:
+			p_max = c.global_position.y
+	return clamp(action_peak_height,256.0 - p_max,300.0 - p_max) * (0.55 + get_boost_multiplicator() * 0.35)
 	
 func get_boost_multiplicator():
 	var v = 0.0
@@ -44,4 +49,5 @@ func _process(delta):
 		Engine.time_scale = 0.25 if time_scale_stop_time > 0.0 else 1.0
 	if Input.is_action_just_pressed("action") and get_elapsed_time_last_action() > MIN_ACTION_DELAY:
 		last_time_action_pressed = Time.get_unix_time_from_system()
+		action_pressed.emit()
 		print("Action registered")

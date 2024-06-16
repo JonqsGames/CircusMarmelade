@@ -96,16 +96,19 @@ func _physics_process(delta):
 				self.velocity.x += v
 			var pr = $RotationCenter.global_position
 			if Input.is_action_pressed("rotate_positive"):
+				$AnimationTree.set("parameters/flying_rot/blend_position", 1.0)
 				#self.global_transform = self.global_transform * Transform2D().translated(-$RotationCenter.position).rotated(r)
 				self.rotate(r)
 				#self.position.x -= sin(r) * $RotationCenter.position.y
 				#self.position.y -= cos(r) * $RotationCenter.position.y
 			elif Input.is_action_pressed("rotate_negative"):
+				$AnimationTree.set("parameters/flying_rot/blend_position", 1.0)
 				#self.global_transform = self.global_transform * Transform2D().translated(-$RotationCenter.position).rotated(-r)
 				self.rotate(-r)
 				#self.position.x += sin(r) * $RotationCenter.position.y
 				#self.position.y += cos(r) * $RotationCenter.position.y
 			else:
+				$AnimationTree.set("parameters/flying_rot/blend_position", 0.0)
 				# Lerp to stable
 				self.rotation = lerp_angle(self.rotation,0.0,delta * 0.6)
 			pr = $RotationCenter.global_position - pr
@@ -125,6 +128,7 @@ func _physics_process(delta):
 						if c.is_in_group("Character"):
 							if (c.status == Status.PILED or c.status == Status.BASE) and col.get_local_shape().name == "FeetShape":
 								self.reparent(c)
+								self.rotation = 0.0
 								self.status = Status.PILED
 								c.status = Status.HOLDING
 								dead.emit()
