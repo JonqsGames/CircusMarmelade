@@ -425,8 +425,8 @@ bbcode_enabled = true
 text = "[center]
 Controls:
 Use Left and Right arrows to move the clown
-Use Up and Down arrows when in air to do some ticks
-Press SPACE just before reception to go higher 
+Use Up and Down arrows when in air to do some tricks
+Press SPACE just before landing to go higher 
 Press ESCAPE to pause
 [/center]"
 fit_content = true
