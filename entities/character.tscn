@@ -1,9 +1,8 @@
-[gd_scene load_steps=59 format=3 uid="uid://d20qj02giwrsk"]
+[gd_scene load_steps=58 format=3 uid="uid://d20qj02giwrsk"]
 
 [ext_resource type="Script" path="res://entities/Character.gd" id="1_uu2un"]
 [ext_resource type="Texture2D" uid="uid://duic01jhq3egx" path="res://img/clown.png" id="2_pjpug"]
 [ext_resource type="Texture2D" uid="uid://c3b7uyo3sqif2" path="res://img/spinner_progress.png" id="3_i23rk"]
-[ext_resource type="AudioStream" uid="uid://djl80n462pak8" path="res://audio/waa.wav" id="3_y31yt"]
 [ext_resource type="AudioStream" uid="uid://b2o46s6dqsheb" path="res://audio/hey.wav" id="4_nvsvb"]
 [ext_resource type="AudioStream" uid="uid://ujo1adbulrlu" path="res://audio/hop.wav" id="5_4ik0v"]
 [ext_resource type="AudioStream" uid="uid://dmpvwsirepqua" path="res://audio/woo.wav" id="6_sjfhq"]
@@ -43,9 +42,9 @@ tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "clips": [{
-"end_offset": 0.05,
-"start_offset": 0.2,
-"stream": ExtResource("3_y31yt")
+"end_offset": 0.1,
+"start_offset": 0.1,
+"stream": ExtResource("5_4ik0v")
 }],
 "times": PackedFloat32Array(0)
 }
