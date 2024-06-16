@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Character
 enum Status {
 	PREPARING,
 	STABLE,
@@ -24,6 +25,12 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 			self.rotation = 0.0
 		elif status == Status.PILED:
 			self.position = Vector2(0.0,-40.0)
+		elif status == Status.FALLING:
+			self.set_collision_mask_value(2,false)
+			self.reparent($/root/Game)
+			for c in self.get_children():
+				if c is Character:
+					c.status = Status.FALLING
 			
 
 @export var left_side = false
@@ -76,39 +83,12 @@ func _physics_process(delta):
 				ActionPressManager.action_peak_height = abs(self.global_position.y) * get_relative_d()/plank.get_half_size()
 				self.status = Status.AERIAL
 		Status.FALLING:
+			self.rotate(tilt_speed * delta)
 			var accel_grav = gravity * delta
 			velocity.y += accel_grav
 			if move_and_slide():
-				for i in range(self.get_slide_collision_count()):
-					var col : KinematicCollision2D = get_slide_collision(i)
-					var c : Node2D = col.get_collider()
-					if c is Plank:
-						# check relative x position
-						#plank = c
-						relative_stick_position = plank.to_local(self.global_position)
-						var x = get_relative_d()
-						if x > 0 and col.get_local_shape().name == "FeetShape":
-							self.status = Status.PRESSING
-							self.velocity = Vector2.ZERO
-							plank.release.connect(self._on_pressing_done,CONNECT_ONE_SHOT | CONNECT_DEFERRED)
-							#Rotate
-							c.tilt(left_side)
-							break
-						else:
-							status = Status.CRASHED
-							self.reparent(c)
-							dead.emit()
-							break
-					elif c.name == "Board" and col.get_local_shape().name == "FeetShape":
-						self.status = Status.PREPARING
-						self.rotation = 0.0
-						self.velocity = Vector2.ZERO
-						break
-					else:
-						status = Status.CRASHED
-						self.reparent(c)
-						dead.emit()
-						break
+				status = Status.CRASHED
+				dead.emit()
 		Status.AERIAL:
 			if Input.is_action_pressed("left"):
 				self.velocity.x -= v
@@ -150,7 +130,7 @@ func _physics_process(delta):
 								dead.emit()
 								break
 							else:
-								var tilt = -sign(self.global_position.x - c.global_position.x) * 0.2
+								var tilt = -sign(self.global_position.x - c.global_position.x) * 0.3
 								c.tilt_speed = tilt
 								self.status = Status.CRASHED
 								self.reparent(c)
@@ -187,7 +167,10 @@ func _physics_process(delta):
 			self.rotation = lerp_angle(self.rotation,0.0,delta * 1.5)
 			self.global_position = plank.to_global(relative_stick_position)
 		Status.PILED, Status.HOLDING:
-			tilt_speed += (randf() - 0.5) * delta * 0.4
+			if abs(self.rotation) > PI * 0.04:
+				tilt_speed -= sign(self.rotation) * delta * 0.4
+			else:
+				tilt_speed += (randf() - 0.5) * delta * 0.4
 			self.rotate(tilt_speed * delta)
 			self.rotation = lerp_angle(self.rotation,0.0,delta * 1.0)
 			if abs(self.rotation) > PI * 0.05:

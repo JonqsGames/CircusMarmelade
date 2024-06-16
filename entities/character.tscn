@@ -277,7 +277,7 @@ advance_expression = "status == Status.BASE"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_t87j2"]
 advance_mode = 2
-advance_expression = "status == Status.AERIAL"
+advance_expression = "status == Status.FALLING"
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ww7wi"]
 states/BlendWalk/node = SubResource("AnimationNodeBlendSpace1D_cqpov")
@@ -289,7 +289,7 @@ states/crash/position = Vector2(693, 158)
 states/flying/node = SubResource("AnimationNodeAnimation_nnuin")
 states/flying/position = Vector2(395, 100)
 states/landing/node = SubResource("AnimationNodeAnimation_efsq3")
-states/landing/position = Vector2(534, 92)
+states/landing/position = Vector2(530, 44)
 states/piled/node = SubResource("AnimationNodeAnimation_wl6ln")
 states/piled/position = Vector2(626, 253)
 states/piling/node = SubResource("AnimationNodeAnimation_kv5n6")
@@ -298,6 +298,8 @@ transitions = ["flying", "landing", SubResource("AnimationNodeStateMachineTransi
 
 [node name="Character" type="CharacterBody2D" groups=["Character"]]
 position = Vector2(0, 1)
+collision_layer = 2
+collision_mask = 3
 script = ExtResource("1_uu2un")
 
 [node name="Mesh" type="MeshInstance2D" parent="."]

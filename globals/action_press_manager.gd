@@ -1,7 +1,7 @@
 extends Node
 
-const MIN_ACTION_DELAY = 1.0
-const ACTION_TIME_WINDOW = 0.8
+const MIN_ACTION_DELAY = 0.5
+const ACTION_TIME_WINDOW = 0.5
 
 var last_time_action_pressed = 0
 
@@ -19,7 +19,7 @@ func boost():
 	last_time_action_pressed = 0.0
 
 func get_boost_value():
-	return clamp(action_peak_height,256.0,450.0) * (2.0 + get_boost_multiplicator() * 1.2)
+	return clamp(action_peak_height,256.0,450.0) * (0.55 + get_boost_multiplicator() * 0.35)
 	
 func get_boost_multiplicator():
 	var v = 0.0

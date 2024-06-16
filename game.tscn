@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://co0ub2gyy2e1i"]
+[gd_scene load_steps=12 format=3 uid="uid://co0ub2gyy2e1i"]
 
 [ext_resource type="PackedScene" uid="uid://d20qj02giwrsk" path="res://entities/character.tscn" id="1_2vaq0"]
 [ext_resource type="Script" path="res://Plank.gd" id="2_b8nrx"]
@@ -11,17 +11,25 @@ radius = 10.0
 height = 20.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_ko8uv"]
-size = Vector3(256, 4, 8)
+size = Vector3(260, 4, 8)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4qxbs"]
-size = Vector2(256, 4)
+size = Vector2(65, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hfyjh"]
+size = Vector3(130, 4, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e57qh"]
+size = Vector2(130, 4)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_l2jq7"]
 
 [node name="Game" type="Node2D"]
 
 [node name="CharacterBase" parent="." instance=ExtResource("1_2vaq0")]
-position = Vector2(0, 0)
+position = Vector2(0, -24)
+collision_layer = 2
+collision_mask = 3
 status = 6
 left_side = true
 
@@ -44,7 +52,21 @@ script = ExtResource("2_b8nrx")
 mesh = SubResource("BoxMesh_ko8uv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Balance/Plank"]
+position = Vector2(-97.5, 0)
 shape = SubResource("RectangleShape2D_4qxbs")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Balance/Plank"]
+position = Vector2(97.5, 0)
+shape = SubResource("RectangleShape2D_4qxbs")
+
+[node name="MiddlePlank" type="StaticBody2D" parent="Balance/Plank"]
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Balance/Plank/MiddlePlank"]
+modulate = Color(0.943446, 0, 0.159984, 1)
+mesh = SubResource("BoxMesh_hfyjh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Balance/Plank/MiddlePlank"]
+shape = SubResource("RectangleShape2D_e57qh")
 
 [node name="Floor" type="StaticBody2D" parent="."]
 
