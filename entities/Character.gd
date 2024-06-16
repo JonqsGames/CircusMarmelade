@@ -16,6 +16,11 @@ var textures = [
 	preload("res://img/clownb.png"), 
 	preload("res://img/clownc.png")
 ]
+var sounds = [
+	preload("res://audio/he.wav"),
+	preload("res://audio/he2.wav"),
+	preload("res://audio/he3.wav")
+]
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var spin_progress : TextureProgressBar = $SpinProgress
@@ -37,19 +42,23 @@ var r_value_score = 0.0 :
 		r_value_score = 0.0
 		if status == Status.AERIAL:
 			$/root/Game/Camera2D.shake(0.0002 * ActionPressManager.action_peak_height,0.03 * ActionPressManager.action_peak_height,0.02 * ActionPressManager.action_peak_height)
-		status = value
-		print("Character change status to %s" % Status.keys()[status])
-		if status == Status.CRASHED:
+		
+		if value == Status.CRASHED:
 			self.rotation = 0.0
-		elif status == Status.PILED:
+		elif value == Status.PILED:
+			if status != Status.HOLDING:
+				$AudioStreamPlayer2D.stream = sounds.pick_random()
+				$AudioStreamPlayer2D.play()
 			self.position = Vector2(0.0,-40.0)
-		elif status == Status.FALLING:
+		elif value == Status.FALLING:
 			ScoreManager.remove_point(score)
 			self.set_collision_mask_value(2,false)
 			self.reparent($/root/Game)
 			for c in self.get_children():
 				if c is Character:
 					c.status = Status.FALLING
+		status = value
+		print("Character change status to %s" % Status.keys()[status])
 			
 
 @export var left_side = false
