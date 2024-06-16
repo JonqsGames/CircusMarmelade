@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://d20qj02giwrsk"]
+[gd_scene load_steps=59 format=3 uid="uid://d20qj02giwrsk"]
 
 [ext_resource type="Script" path="res://entities/Character.gd" id="1_uu2un"]
 [ext_resource type="Texture2D" uid="uid://duic01jhq3egx" path="res://img/clown.png" id="2_pjpug"]
@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://ujo1adbulrlu" path="res://audio/hop.wav" id="5_4ik0v"]
 [ext_resource type="AudioStream" uid="uid://dmpvwsirepqua" path="res://audio/woo.wav" id="6_sjfhq"]
 [ext_resource type="AudioStream" uid="uid://6dap1ebo1nk3" path="res://audio/splash.wav" id="7_stcgf"]
+[ext_resource type="Texture2D" uid="uid://bdh6yjwuo2l6p" path="res://img/splash.png" id="8_s8jem"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_mrfxx"]
 radius = 16.0
@@ -157,6 +158,18 @@ tracks/0/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Blood:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [15]
+}
 
 [sub_resource type="Animation" id="Animation_2rjii"]
 resource_name = "crash"
@@ -202,6 +215,18 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0)
 }
 tracks/2/use_blend = true
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Blood:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.1, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 15]
+}
 
 [sub_resource type="Animation" id="Animation_0wym0"]
 resource_name = "fail"
@@ -576,3 +601,12 @@ fill_mode = 4
 texture_progress = ExtResource("3_i23rk")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+
+[node name="Blood" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-1, -47)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("8_s8jem")
+hframes = 4
+vframes = 4
+frame = 15
