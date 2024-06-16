@@ -9,8 +9,23 @@ var _previous_y = 0.0
 var _last_offset = Vector2(0, 0)
 var _last_shook_timer = 0
 
+# Variables to control zoom level
+var default_zoom = Vector2(1, 1)
+var zoom_speed = 2  # Control how fast the zoom changes
+
+# Variables to control zoom speed
+var min_speed = 0
+var max_speed = 1000
+
+# Initial position of the camera in y axis
+var initial_position_y = 0
+
+func _ready():
+	initial_position_y = self.position.y
+
 # Shake with decreasing intensity while there's time remaining.
 func _process(delta):
+	adjustZoom(delta)
 	# Only shake when there's shake time remaining.
 	if _timer == 0:
 		return
@@ -37,6 +52,29 @@ func _process(delta):
 	if _timer <= 0:
 		_timer = 0
 		set_offset(get_offset() - _last_offset)
+
+func adjustZoom(delta):
+	# Control zoom camera
+	var camera_size = get_viewport_rect().size * zoom
+	var camera_rect = Rect2(get_screen_center_position() - camera_size / 2, camera_size)
+	var camera_top_position = abs(camera_rect.position.y)
+	
+	var highest_player = find_highest_player()
+	
+	var player_speed = highest_player.get_aerial_speed()
+	var normalized_speed = clamp((player_speed - min_speed) / (max_speed - min_speed), 0, 1)
+	
+	var camera_top_offset = 100
+	if abs(highest_player.global_position.y) > camera_top_position - camera_top_offset:
+		# Zoom to 0.5 when player reach the top of the camera
+		# Need to fix it to match the zoom level based on player altitude
+		zoom = zoom.lerp(Vector2(0.5, 0.5), normalized_speed)
+		move_camera_y_smoothly(initial_position_y / 0.5, 5, delta)
+	else:
+		# Back to normal zoom
+		zoom = zoom.lerp(Vector2(1, 1), normalized_speed)
+		move_camera_y_smoothly(initial_position_y, 5, delta)
+
 # Kick off a new screenshake effect.
 func shake(duration, frequency, amplitude):
 	if frequency == 0: return
@@ -50,3 +88,16 @@ func shake(duration, frequency, amplitude):
 	# Reset previous offset, if any.
 	set_offset(get_offset() - _last_offset)
 	_last_offset = Vector2(0, 0)
+	
+# Method to move the camera's y position smoothly to a target y position
+func move_camera_y_smoothly(target_y_position: float, camera_speed: float, delta):
+	self.position.y = lerp(self.position.y, target_y_position, camera_speed * delta)
+	
+func find_highest_player():
+	var highest_y = -INF
+	var current_player = null
+	for character in get_tree().get_nodes_in_group("Character"):
+		if abs(character.global_position.y) > highest_y:
+			highest_y = abs(character.global_position.y)
+			current_player = character
+	return current_player
