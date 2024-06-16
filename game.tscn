@@ -1,8 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://co0ub2gyy2e1i"]
+[gd_scene load_steps=23 format=3 uid="uid://co0ub2gyy2e1i"]
 
+[ext_resource type="Texture2D" uid="uid://cdviiwygxt2ea" path="res://img/circus_open.png" id="1_2ohbs"]
 [ext_resource type="PackedScene" uid="uid://d20qj02giwrsk" path="res://entities/character.tscn" id="1_2vaq0"]
 [ext_resource type="Script" path="res://Plank.gd" id="2_b8nrx"]
 [ext_resource type="Script" path="res://Camera2D.gd" id="2_dbve3"]
+[ext_resource type="Script" path="res://EarthBackground.gd" id="2_ng5vw"]
 [ext_resource type="PackedScene" uid="uid://bkfqlew2irmva" path="res://entities/spawner.tscn" id="3_ysj0m"]
 [ext_resource type="Script" path="res://DebugContainer.gd" id="4_2q6mj"]
 [ext_resource type="Script" path="res://BounceBar.gd" id="6_fxx7k"]
@@ -227,6 +229,22 @@ _data = {
 }
 
 [node name="Game" type="Node2D"]
+
+[node name="WorldBackground" type="Node2D" parent="."]
+position = Vector2(-38, 10)
+
+[node name="EarthBackground" type="Node2D" parent="WorldBackground"]
+position = Vector2(83, 9850)
+script = ExtResource("2_ng5vw")
+color_earth = Color(0.0392157, 0.34902, 0.105882, 1)
+color_sky = Color(0.561149, 0.704473, 1, 1)
+color_space = Color(1.44392e-07, 0, 0.373308, 1)
+radius_earth = 10000.0
+space_ratio = 5.0
+
+[node name="CircusOpen" type="Sprite2D" parent="WorldBackground"]
+position = Vector2(48, -478)
+texture = ExtResource("1_2ohbs")
 
 [node name="CharacterBase" parent="." instance=ExtResource("1_2vaq0")]
 position = Vector2(0, -24)

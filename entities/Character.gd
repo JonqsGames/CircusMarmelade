@@ -47,6 +47,9 @@ var score = 500.0
 
 signal dead()
 
+func get_aerial_speed():
+	return self.velocity.length()
+
 func get_relative_d():
 	var x = relative_stick_position.x
 	if left_side:
