@@ -208,17 +208,18 @@ func _physics_process(delta):
 			self.rotation = lerp_angle(self.rotation,0.0,delta * 1.5)
 			self.global_position = plank.to_global(relative_stick_position)
 		Status.PILED, Status.HOLDING:
-			if abs(self.rotation) > PI * 0.04:
-				tilt_speed -= sign(self.rotation) * delta * 0.8
-			else:
-				tilt_speed += (randf() - 0.5) * delta * 0.4
-				tilt_speed *= 0.999
-			self.rotate(tilt_speed * delta)
-			self.rotation = lerp_angle(self.rotation,0.0,delta * 1.0)
-			if abs(self.rotation) > PI * 0.05:
-				if self.get_parent() is Character:
-					self.get_parent().status = Status.PILED
-				self.status = Status.FALLING
+			if self.get_parent() is Character:
+				if abs(self.rotation) > PI * 0.04:
+					tilt_speed -= sign(self.rotation) * delta * 0.8
+				else:
+					tilt_speed += (randf() - 0.5) * delta * 0.4
+					tilt_speed *= 0.999
+				self.rotate(tilt_speed * delta)
+				self.rotation = lerp_angle(self.rotation,0.0,delta * 1.0)
+				if abs(self.rotation) > PI * 0.05:
+					if self.get_parent() is Character:
+						self.get_parent().status = Status.PILED
+					self.status = Status.FALLING
 	
 func die():
 	self.queue_free()

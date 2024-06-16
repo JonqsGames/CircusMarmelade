@@ -8,14 +8,19 @@ enum Status {
 
 var status = Status.INTRO:
 	set(value):
-		status = value
-		match status:
-			Status.GAME:
-				$/root/Game/GameUI.visible = true
-				$/root/Game/MenuLayer.visible = false
-			Status.PAUSE:
-				$/root/Game/GameUI.visible = false
-				$/root/Game/MenuLayer.visible = true
+		if status != value:
+			match status:
+				Status.GAME:
+					$/root/Game/AnimationPlayer.play_backwards("start_game")
+			status = value
+			match status:
+				Status.GAME:
+					$/root/Game/AnimationPlayer.play("start_game")
+					$/root/Game/GameUI.visible = true
+					$/root/Game/MenuLayer.visible = false
+				Status.PAUSE:
+					$/root/Game/GameUI.visible = false
+					$/root/Game/MenuLayer.visible = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
