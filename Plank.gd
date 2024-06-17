@@ -15,5 +15,4 @@ func tilt(left_side):
 	t.tween_callback(self._on_tilt_end)
 
 func _on_tilt_end():
-	print("Tilt")
 	release.emit()

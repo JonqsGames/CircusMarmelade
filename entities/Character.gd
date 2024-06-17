@@ -161,7 +161,7 @@ func _physics_process(delta):
 			if velocity.y < 0.0 and velocity.y > -accel_grav:
 				# Reach peak
 				ActionPressManager.action_peak_height = abs(self.global_position.y)
-				print("Character reach peak at %s" % [ActionPressManager.action_peak_height])
+				#print("Character reach peak at %s" % [ActionPressManager.action_peak_height])
 			velocity.y += accel_grav
 			if move_and_slide():
 				for i in range(self.get_slide_collision_count()):
@@ -193,7 +193,7 @@ func _physics_process(delta):
 							if x > 0 and col.get_local_shape().name == "FeetShape":
 								self.status = Status.PRESSING
 								self.velocity = Vector2.ZERO
-								print("[Character] Landing : %.2f" % [global_position.y])
+								#print("[Character] Landing : %.2f" % [global_position.y])
 								ActionPressManager.set_landing_time()
 								plank.release.connect(self._on_pressing_done,CONNECT_ONE_SHOT | CONNECT_DEFERRED)
 								#Rotate
